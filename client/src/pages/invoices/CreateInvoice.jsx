@@ -24,7 +24,7 @@ const CreateInvoice = () => {
     const [invoiceData, setInvoiceData] = useState({
         type: isQuotationPath ? 'Quotation' : isProformaPath ? 'Proforma' : 'Invoice',
         invoiceNumber: '1',
-        prefix: isQuotationPath ? 'QT-' : isProformaPath ? 'PI-' : 'INV-',
+        prefix: isQuotationPath ? 'EST-' : isProformaPath ? 'PI-' : 'INV-',
         date: new Date().toISOString().split('T')[0],
         dueDate: new Date().toISOString().split('T')[0],
         reference: '',
@@ -265,7 +265,7 @@ const CreateInvoice = () => {
                                                 setInvoiceData(prev => ({ 
                                                     ...prev, 
                                                     type: newType, 
-                                                    prefix: 'QT-',
+                                                    prefix: 'EST-',
                                                     invoiceNumber: res.data.nextNumber,
                                                     id: prev.type !== newType ? undefined : prev.id 
                                                 }));
