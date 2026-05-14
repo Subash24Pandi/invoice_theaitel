@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(uuid())
+  companyName  String
+  ownerName    String
+  email        String     @unique
+  phone        String
+  gstNumber    String?
+  password     String
+  logo         String?
+  createdAt    DateTime   @default(now())
+  customers    Customer[]
+  products     Product[]
+  invoices     Invoice[]
+}
+
+model Customer {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  name        String
+  companyName String?
+  gstin       String?
+  email       String?
+  phone       String?
+  address     String?
+  state       String?
+  createdAt   DateTime  @default(now())
+  invoices    Invoice[]
+}
+
+model Product {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  name        String
+  description String?
+  hsnCode     String?
+  unit        String        @default("PCS")
+  price       Float
+  gstRate     Float         @default(18)
+  stock       Float         @default(0)
+  createdAt   DateTime      @default(now())
+  invoiceItems InvoiceItem[]
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id])
+  customerId     String
+  customer       Customer      @relation(fields: [customerId], references: [id])
+  invoiceNumber  String
+  type           String        @default("Invoice") // Quotation, Proforma, Invoice
+  date           DateTime      @default(now())
+  dueDate        DateTime?
+  subTotal       Float
+  taxAmount      Float
+  totalAmount    Float
+  status         String        @default("Draft")
+  notes          String?
+  terms          String?
+  paymentMethod  String?
+  amountPaid     Float         @default(0)
+  createdAt      DateTime      @default(now())
+  items          InvoiceItem[]
+}
+
+model InvoiceItem {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id])
+  name        String
+  description String?
+  quantity    Float
+  price       Float
+  gstRate     Float
+  amount      Float
+}

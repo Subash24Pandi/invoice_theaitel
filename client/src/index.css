@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #eaf6f3;
+  --color-primary-100: #d6ede7;
+  --color-primary-200: #addbcd;
+  --color-primary-300: #83c9b4;
+  --color-primary-400: #5ab79b;
+  --color-primary-500: #29ab87;
+  --color-primary-600: #21896c;
+  --color-primary-700: #196751;
+  --color-primary-800: #104536;
+  --color-primary-900: #08221b;
+  --color-primary-950: #04110d;
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  
+  --font-family-poppins: "Poppins", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: var(--font-family-poppins);
+    font-size: 14px; /* Minimal base size */
+  }
+
+  h1 { @apply text-4xl font-black tracking-tight; }
+  h2 { @apply text-2xl font-bold tracking-tight; }
+  h3 { @apply text-xl font-bold; }
+}
+
+@layer components {
+  .mesh-gradient {
+    background-color: #ffffff;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(160,40%,98%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(170,45%,96%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(180,40%,98%,1) 0, transparent 50%),
+      radial-gradient(at 50% 100%, hsla(160,50%,99%,1) 0, transparent 50%);
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-2xl border border-white rounded-[2.5rem];
+    box-shadow: 0 10px 40px -10px rgba(41, 171, 135, 0.15);
+  }
+
+  .premium-card {
+    @apply bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(41,171,135,0.08)] hover:-translate-y-1;
+  }
+
+  .stat-card {
+    @apply relative overflow-hidden bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all duration-500 hover:shadow-[0_15px_40px_rgba(41,171,135,0.1)];
+  }
+
+  .premium-input {
+    @apply w-full px-5 py-3.5 bg-white/50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-primary-50 focus:border-primary-400 transition-all duration-300 text-sm;
+  }
+
+  .premium-button {
+    @apply relative overflow-hidden px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl shadow-md hover:bg-primary-700 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 text-sm;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium;
+  }
+
+  .sidebar-link-active {
+    @apply bg-primary-600 text-white shadow-lg;
+  }
+
+  .sidebar-link-inactive {
+    @apply text-slate-400 hover:bg-slate-100 hover:text-slate-600;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full;
+  }
+}
