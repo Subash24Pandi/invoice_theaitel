@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Invoice, Customer } = require('../models');
 const auth = require('../middleware/auth');
+const axios = require('axios');
 
 // Get all invoices (Global)
 router.get('/', auth, async (req, res) => {
@@ -39,6 +40,27 @@ router.get('/next-number', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
     try {
         const invoice = await Invoice.create(req.body);
+        
+        // Background Webhook to Lead Dashboard
+        try {
+            const customer = await Customer.findByPk(invoice.customerId);
+            if (customer) {
+                const webhookUrl = 'https://aitel-bde-backend.onrender.com/api/webhooks/portal';
+                const payload = {
+                    customerName: customer.name,
+                    email: customer.email,
+                    phone: customer.phone,
+                    status: invoice.type === 'Quotation' ? 'Quotation Raised' : 'Invoice Raised',
+                    companyName: customer.companyName || 'N/A'
+                };
+                
+                // Fire and forget (don't await so the UI stays fast)
+                axios.post(webhookUrl, payload).catch(err => console.error('Webhook Error:', err.message));
+            }
+        } catch (webhookErr) {
+            console.error('Failed to prepare webhook:', webhookErr.message);
+        }
+
         res.json(invoice);
     } catch (err) {
         res.status(500).json({ message: err.message });
