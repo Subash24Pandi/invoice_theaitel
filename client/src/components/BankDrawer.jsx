@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, HelpCircle, ChevronRight, Info } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 
 const BankDrawer = ({ isOpen, onClose, onSave }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +80,7 @@ const BankDrawer = ({ isOpen, onClose, onSave }) => {
                         onClick={async () => { 
                             setIsLoading(true);
                             try {
-                                const res = await axios.post('http://localhost:5000/api/banks', formData);
+                                const res = await api.post('/banks', formData);
                                 onSave(res.data); 
                                 onClose(); 
                             } catch (err) {

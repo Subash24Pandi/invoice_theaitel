@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Trash2, Signature as SigIcon, User, Upload, CheckCircle2, X } from 'lucide-react';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const Settings = () => {
     const [signatures, setSignatures] = useState([]);
@@ -15,7 +15,7 @@ const Settings = () => {
 
     const fetchSignatures = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/signatures');
+            const res = await api.get('/signatures');
             setSignatures(res.data);
         } catch (err) { console.error(err); }
         finally { setLoading(false); }
@@ -35,18 +35,18 @@ const Settings = () => {
     const handleSave = async () => {
         if (!newSig.name || !newSig.image) return alert('Please provide both name and signature image');
         try {
-            await axios.post('http://localhost:5000/api/signatures', newSig);
+            await api.post('/signatures', newSig);
             setNewSig({ name: '', image: '', invert: false });
             setIsAdding(false);
-            fetchSignaturesCorrect();
+            fetchSignatures();
         } catch (err) { console.error(err); }
     };
 
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this signature?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/signatures/${id}`);
-            fetchSignaturesCorrect();
+            await api.delete(`/signatures/${id}`);
+            fetchSignatures();
         } catch (err) { console.error(err); }
     };
 

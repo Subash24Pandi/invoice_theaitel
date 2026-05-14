@@ -10,7 +10,7 @@ import {
     Tooltip, ResponsiveContainer, AreaChart, Area,
     PieChart, Pie, Cell
 } from 'recharts';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const Reports = () => {
     const [data, setData] = useState(null);
@@ -21,7 +21,7 @@ const Reports = () => {
     useEffect(() => {
         const fetchReports = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/reports/summary');
+                const res = await api.get('/reports/summary');
                 setData(res.data);
             } catch (err) { console.error(err); }
             finally { setLoading(false); }

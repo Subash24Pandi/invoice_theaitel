@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Banknote, Trash2, Edit2, CheckCircle2, QrCode, Building2, User } from 'lucide-react';
-import axios from 'axios';
+import api from '../../utils/api';
 import BankDrawer from '../../components/BankDrawer';
 
 const Payments = () => {
@@ -14,7 +14,7 @@ const Payments = () => {
 
     const fetchBanks = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/banks');
+            const res = await api.get('/banks');
             setBanks(res.data);
         } catch (err) {
             console.error('Fetch Banks Error:', err);
@@ -26,7 +26,7 @@ const Payments = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this bank account?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/banks/${id}`);
+            await api.delete(`/banks/${id}`);
             setBanks(banks.filter(b => b.id !== id));
         } catch (err) {
             console.error('Delete Bank Error:', err);

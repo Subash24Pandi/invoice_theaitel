@@ -4,7 +4,7 @@ import {
     ArrowUpRight, ArrowDownRight, MoreHorizontal,
     Box, Filter, Download
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../../utils/api';
 import ProductDrawer from '../../components/ProductDrawer';
 
 const Products = () => {
@@ -17,15 +17,15 @@ const Products = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/products');
+            const res = await api.get('/products');
             setProducts(res.data);
         } catch (err) { console.error(err); }
     };
 
     const handleSave = async (formData) => {
         try {
-            if (selectedProduct) await axios.put(`http://localhost:5000/api/products/${selectedProduct.id}`, formData);
-            else await axios.post('http://localhost:5000/api/products', formData);
+            if (selectedProduct) await api.put(`/products/${selectedProduct.id}`, formData);
+            else await api.post('/products', formData);
             fetchProducts();
             setIsDrawerOpen(false);
         } catch (err) { console.error(err); }
@@ -34,7 +34,7 @@ const Products = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/products/${id}`);
+            await api.delete(`/products/${id}`);
             fetchProducts();
         } catch (err) { console.error(err); }
     };

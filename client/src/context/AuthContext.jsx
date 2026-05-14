@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (token) {
-            axios.defaults.headers.common['x-auth-token'] = token;
             fetchUser();
         } else {
             setLoading(false);
@@ -21,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUser = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/profile');
+            const res = await api.get('/auth/profile');
             setUser(res.data);
         } catch (err) {
             localStorage.removeItem('token');
