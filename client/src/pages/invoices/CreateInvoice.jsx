@@ -89,7 +89,10 @@ const CreateInvoice = () => {
             if (numRes.data) {
                 setInvoiceData(prev => ({ ...prev, invoiceNumber: numRes.data.nextNumber }));
             }
-        } catch (err) { console.error(err); }
+        } catch (err) { 
+            console.error('Fetch Error:', err); 
+            alert('CRITICAL: Failed to load data from ' + (import.meta.env.VITE_API_URL || 'localhost') + '. Error: ' + err.message);
+        }
     };
 
     const fetchExistingInvoice = async () => {
@@ -100,7 +103,10 @@ const CreateInvoice = () => {
                 ...data,
                 customerId: data.customerId?.id || data.customerId
             });
-        } catch (err) { console.error(err); }
+        } catch (err) { 
+            console.error('Fetch Invoice Error:', err); 
+            alert('Failed to fetch invoice: ' + err.message);
+        }
     };
 
     const calculateTotals = (items, gDisc = invoiceData.globalDiscount, rOff = invoiceData.roundOff) => {
