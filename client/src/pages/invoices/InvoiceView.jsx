@@ -337,8 +337,8 @@ const InvoiceView = () => {
 
                 {/* TOTALS AREA */}
                 {(() => {
-                    const place = (invoice.placeOfSupply || invoice.Customer?.placeOfSupply || '').toUpperCase();
-                    const isTN = place.includes('TAMIL NADU') || place.includes('33');
+                    const place = (invoice.placeOfSupply || invoice.Customer?.placeOfSupply || '').toUpperCase().replace(/\s/g, '');
+                    const isTN = place.includes('TAMILNADU') || place.includes('33');
                     const totalTax = invoice.taxAmount || 0;
                     
                     return (
