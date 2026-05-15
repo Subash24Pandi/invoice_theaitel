@@ -8,8 +8,8 @@ router.get('/summary', async (req, res) => {
     try {
         const invoices = await Invoice.findAll();
         
-        // Basic totals
-        const totalSales = invoices.filter(inv => inv.type === 'Invoice').reduce((acc, inv) => acc + (inv.totalAmount || 0), 0);
+        // Basic totals (Cash-based: only count what is actually paid)
+        const totalSales = invoices.filter(inv => inv.type === 'Invoice').reduce((acc, inv) => acc + (inv.amountPaid || 0), 0);
         const totalTax = invoices.filter(inv => inv.type === 'Invoice').reduce((acc, inv) => acc + (inv.taxAmount || 0), 0);
         const totalPending = invoices.filter(inv => inv.type === 'Invoice').reduce((acc, inv) => acc + ((inv.totalAmount || 0) - (inv.amountPaid || 0)), 0);
 
@@ -23,7 +23,7 @@ router.get('/summary', async (req, res) => {
             
             const monthTotal = invoices
                 .filter(inv => inv.type === 'Invoice' && new Date(inv.createdAt).getMonth() === date.getMonth() && new Date(inv.createdAt).getFullYear() === monthYear)
-                .reduce((acc, inv) => acc + (inv.totalAmount || 0), 0);
+                .reduce((acc, inv) => acc + (inv.amountPaid || 0), 0);
                 
             monthlySales.push({ month: monthName, total: monthTotal });
         }
@@ -31,13 +31,13 @@ router.get('/summary', async (req, res) => {
         // Top Customers
         const customerMap = {};
         invoices.filter(inv => inv.type === 'Invoice').forEach(inv => {
-            customerMap[inv.customerId] = (customerMap[inv.customerId] || 0) + (inv.totalAmount || 0);
+            customerMap[inv.customerId] = (customerMap[inv.customerId] || 0) + (inv.amountPaid || 0);
         });
         
         const customers = await Customer.findAll();
         const topCustomers = Object.keys(customerMap)
             .map(id => ({
-                name: customers.find(c => c.id === id)?.name || 'Unknown',
+                name: customers.find(c => Number(c.id) === Number(id))?.name || 'Unknown',
                 total: customerMap[id]
             }))
             .sort((a, b) => b.total - a.total)
