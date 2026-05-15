@@ -390,6 +390,7 @@ const CreateInvoice = () => {
                                             gstRate: prod.taxRate || 0,
                                             unit: prod.unit || 'PCS',
                                             stock: prod.openingQty || 0,
+                                            description: prod.description || '',
                                             discount: 0,
                                             discountType: '%'
                                         };
@@ -428,6 +429,13 @@ const CreateInvoice = () => {
                                         <tr key={idx} className="group">
                                             <td className="px-4 py-4">
                                                 <div className="font-bold text-gray-800">{item.name}</div>
+                                                <textarea 
+                                                    className="w-full text-[10px] text-gray-500 mt-1 bg-transparent border-none outline-none resize-none h-auto min-h-[20px]"
+                                                    value={item.description || ''}
+                                                    onChange={(e) => updateItem(idx, 'description', e.target.value)}
+                                                    placeholder="Add description..."
+                                                    rows={1}
+                                                />
                                                 <div className="text-[10px] text-gray-400 mt-1">Stock: {item.stock} {item.unit}</div>
                                             </td>
                                             <td className="px-4 py-4 text-center">

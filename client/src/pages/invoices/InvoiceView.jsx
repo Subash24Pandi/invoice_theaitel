@@ -323,6 +323,7 @@ const InvoiceView = () => {
                                         <td className="text-left">{idx + 1}</td>
                                         <td className="text-left">
                                             <p className="font-bold uppercase text-[#1a1a1a]">{item.name}</p>
+                                            {item.description && <p className="text-[9px] text-gray-500 mt-0.5 leading-tight italic">{item.description}</p>}
                                         </td>
                                         <td className="text-right font-bold">₹{price.toFixed(2)}</td>
                                         <td className="text-right font-bold uppercase">{quantity} {item.unit}</td>
