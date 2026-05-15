@@ -501,24 +501,6 @@ const CreateInvoice = () => {
                                 onFocus={() => setShowTerms(true)}
                             />
                         </div>
-                        <div className="space-y-3 pt-2">
-                            {['Reverse Charge Mechanism applicable?', 'Create E-Waybill', 'Create E-Invoice'].map(t => (
-                                <div key={t} className="flex items-center gap-3">
-                                    <div className="w-8 h-4 bg-gray-200 rounded-full p-0.5"><div className="w-3 h-3 bg-white rounded-full shadow-sm" /></div>
-                                    <span className="text-xs font-medium text-gray-600">{t}</span>
-                                    <HelpCircle size={14} className="text-gray-300" />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="pt-4 space-y-4">
-                             <div className="flex items-center gap-2 text-xs font-bold">Attach files <HelpCircle size={14} className="text-gray-300" /></div>
-                             <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-md text-[11px] font-bold text-gray-500 hover:bg-gray-50 transition-all shadow-sm">
-                                <Plus size={14} className="rotate-45" /> Attach Files (Max: 5)
-                             </button>
-                             <button className="flex items-center gap-2 text-[11px] font-bold text-gray-400">
-                                <Settings size={14} /> Use Coupons <span className="text-[8px] bg-blue-100 text-blue-600 px-1 rounded ml-1">BETA</span>
-                             </button>
-                        </div>
                     </div>
 
                     {/* RIGHT SIDE (SUMMARY) */}

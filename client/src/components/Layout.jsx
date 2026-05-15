@@ -42,7 +42,6 @@ const Layout = () => {
         { icon: FileText, label: 'Invoices', path: '/app/invoices' },
         { icon: CreditCard, label: 'Accounts', path: '/app/accounts' },
         { icon: CreditCard, label: 'Payments', path: '/app/payments' },
-        { icon: Settings, label: 'Settings', path: '/app/settings' },
     ];
 
     return (
