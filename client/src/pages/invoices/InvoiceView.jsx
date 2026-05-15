@@ -226,7 +226,10 @@ const InvoiceView = () => {
 
             <div className="invoice-page relative overflow-hidden" ref={invoiceRef}>
                 {/* WATERMARK */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-[0.05] rotate-[-30deg]">
+                <div 
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-[0.05]"
+                    style={{ transform: 'rotate(-30deg)' }}
+                >
                     <img src={logoBase64} alt="" className="w-[800px] h-[800px] object-contain grayscale" />
                 </div>
 
