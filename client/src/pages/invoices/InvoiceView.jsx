@@ -63,50 +63,20 @@ const InvoiceView = () => {
                     allowTaint: false,
                     backgroundColor: '#ffffff',
                     onclone: (clonedDoc) => {
-                        // Force standard colors and strip oklch/modern colors that break html2canvas
                         const style = clonedDoc.createElement('style');
                         style.innerHTML = `
-                            :root {
-                                color-scheme: light !important;
-                            }
-                            * {
-                                -webkit-print-color-adjust: exact !important;
-                                print-color-adjust: exact !important;
-                                border-color: #e5e7eb !important; /* default border */
-                            }
-                            .invoice-page { 
-                                color: #000000 !important;
-                                background: #ffffff !important;
-                                box-shadow: none !important;
-                            }
-                            .blue-text { color: #0066cc !important; }
-                            .text-gray-500, .text-slate-500 { color: #6b7280 !important; }
-                            .text-gray-600, .text-slate-600 { color: #4b5563 !important; }
-                            .text-gray-800, .text-slate-800 { color: #1f2937 !important; }
-                            .text-black, .text-slate-900 { color: #000000 !important; }
-                            .border-gray-100, .border-slate-100 { border-color: #f3f4f6 !important; }
-                            .divide-gray-100 > * + * { border-color: #f3f4f6 !important; }
-                            .bg-slate-100 { background-color: #f3f4f6 !important; }
-                            .bg-slate-50 { background-color: #f9fafb !important; }
+                            :root { color-scheme: light !important; }
+                            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                            .invoice-page { box-shadow: none !important; border: none !important; }
                         `;
                         clonedDoc.head.appendChild(style);
-
-                        // Proactive cleanup: traverse and check for oklch in computed styles
-                        const allElements = clonedDoc.getElementsByTagName('*');
-                        for (let i = 0; i < allElements.length; i++) {
-                            const el = allElements[i];
-                            const style = window.getComputedStyle(el);
-                            if (style.color.includes('oklch')) el.style.color = '#000000';
-                            if (style.backgroundColor.includes('oklch')) el.style.backgroundColor = 'transparent';
-                            if (style.borderColor.includes('oklch')) el.style.borderColor = '#e5e7eb';
-                        }
                     }
                 });
-                const imgData = canvas.toDataURL('image/jpeg', 0.8);
+                const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
                 pdf.save(`${downloadFileName}.pdf`);
             } catch (err) { console.error('PDF Generation Error:', err); }
         } else if (format === 'DOCX') {
@@ -415,17 +385,16 @@ const InvoiceView = () => {
                         </div>
                     </div>
                     <div className="col-span-4 text-right">
-                        <p className="text-[10px] font-bold text-gray-500 uppercase mb-4">For THE AITEL</p>
-                        <div className="h-32 flex flex-col items-end justify-center">
+                        <p className="text-[10px] font-bold text-gray-500 uppercase mb-1">For THE AITEL</p>
+                        <div className="h-20 flex flex-col items-end justify-center">
                             {invoice.signature && (
                                 <img 
                                     src={invoice.signature} 
-                                    className="h-full w-auto object-contain" 
+                                    className="h-full w-auto object-contain mix-blend-multiply" 
                                     alt="Signature" 
                                 />
                             )}
                         </div>
-                        <div className="h-px bg-slate-200 w-full mb-1"></div>
                         <p className="text-[10px] font-bold text-gray-400 uppercase">Authorized Signatory</p>
                     </div>
                 </div>
