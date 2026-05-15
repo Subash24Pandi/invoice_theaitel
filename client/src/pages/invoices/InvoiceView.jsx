@@ -58,7 +58,7 @@ const InvoiceView = () => {
         if (format === 'PDF') {
             try {
                 const canvas = await html2canvas(element, { 
-                    scale: 3, 
+                    scale: 2, 
                     useCORS: true, 
                     allowTaint: false,
                     backgroundColor: '#ffffff',
@@ -102,11 +102,11 @@ const InvoiceView = () => {
                         }
                     }
                 });
-                const imgData = canvas.toDataURL('image/png');
+                const imgData = canvas.toDataURL('image/jpeg', 0.8);
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
                 pdf.save(`${downloadFileName}.pdf`);
             } catch (err) { console.error('PDF Generation Error:', err); }
         } else if (format === 'DOCX') {
@@ -323,7 +323,7 @@ const InvoiceView = () => {
                                         <td className="text-left">{idx + 1}</td>
                                         <td className="text-left">
                                             <p className="font-bold uppercase text-[#1a1a1a]">{item.name}</p>
-                                            {item.description && <p className="text-[9px] text-gray-500 mt-0.5 leading-tight italic">{item.description}</p>}
+                                            {item.description && <p className="text-[9px] text-gray-500 mt-0.5 leading-tight italic">({item.description})</p>}
                                         </td>
                                         <td className="text-right font-bold">₹{price.toFixed(2)}</td>
                                         <td className="text-right font-bold uppercase">{quantity} {item.unit}</td>
