@@ -70,6 +70,9 @@ const Dashboard = () => {
                     customers: custRes.data.length.toLocaleString()
                 });
 
+                // Set activities (latest 8)
+                setActivities(allInvoices.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8));
+
                 // Set chart data from summary
                 if (summary.monthlySales) {
                     setChartData(summary.monthlySales.map(s => ({ name: s.month, value: s.total })));
@@ -82,6 +85,8 @@ const Dashboard = () => {
         fetchStats();
     }, []);
 
+    const [activities, setActivities] = useState([]);
+
     return (
         <div className="space-y-8 max-w-[1400px] mx-auto">
             {/* Top Header Section */}
@@ -93,19 +98,13 @@ const Dashboard = () => {
                     </div>
                     <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Command Center</h1>
                     <div className="flex items-center gap-4 text-slate-500 font-medium bg-white/50 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/40 w-fit text-xs">
-                        <div className="flex items-center gap-2"><Calendar size={14} /> May 12, 2026</div>
+                        <div className="flex items-center gap-2"><Calendar size={14} /> May 15, 2026</div>
                         <div className="w-px h-3 bg-slate-300" />
                         <div className="flex items-center gap-2 text-green-500 font-bold"><Activity size={14} /> Live</div>
                     </div>
                 </div>
                 
                 <div className="flex gap-3 relative">
-                    <button 
-                        onClick={handleExport}
-                        className="bg-white text-slate-600 font-bold px-5 py-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all text-xs flex items-center gap-2 active:scale-95 shadow-sm"
-                    >
-                        <Download size={16} /> Export
-                    </button>
                     <div className="relative">
                         <button 
                             onClick={() => setShowNewDocDropdown(!showNewDocDropdown)}
@@ -153,13 +152,13 @@ const Dashboard = () => {
                 <StatCard title="Customer Growth" value={data.customers} trend={14.1} icon={Users} color="bg-emerald-600" delay={0.4} />
             </div>
 
-            <div className="grid grid-cols-1 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Revenue Analytics Chart */}
                 <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="premium-card p-8"
+                    className="premium-card p-8 lg:col-span-8"
                 >
                     <div className="flex items-center justify-between mb-8">
                         <div>
@@ -190,7 +189,54 @@ const Dashboard = () => {
                         </ResponsiveContainer>
                     </div>
                 </motion.div>
+
+                {/* Recent Activity Section */}
+                <motion.div 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="premium-card p-6 lg:col-span-4"
+                >
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-lg font-bold text-slate-900 tracking-tight">Recent Activity</h3>
+                        <Activity size={18} className="text-primary-500" />
+                    </div>
+                    
+                    <div className="space-y-4">
+                        {activities.length > 0 ? activities.map((activity, idx) => (
+                            <div key={idx} className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 group">
+                                <div className={`p-2.5 rounded-lg ${activity.type === 'Invoice' ? 'bg-emerald-50 text-emerald-500' : activity.type === 'Proforma' ? 'bg-blue-50 text-blue-500' : 'bg-amber-50 text-amber-500'}`}>
+                                    <FileText size={16} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-bold text-slate-900 truncate">
+                                        {activity.type === 'Invoice' ? 'Tax Invoice' : activity.type === 'Proforma' ? 'Proforma' : 'Quotation'} generated
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                                        For {activity.Customer?.name || 'Walk-in Customer'}
+                                    </p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-[10px] font-bold text-slate-900 tracking-tight">₹{activity.totalAmount.toLocaleString('en-IN')}</p>
+                                    <p className="text-[9px] text-slate-300 font-bold mt-0.5 uppercase">{new Date(activity.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</p>
+                                </div>
+                            </div>
+                        )) : (
+                            <div className="text-center py-10">
+                                <p className="text-xs text-slate-400 font-medium">No recent activity found.</p>
+                            </div>
+                        )}
+                    </div>
+                    
+                    <button 
+                        onClick={() => navigate('/app/invoices')}
+                        className="w-full mt-6 py-3 rounded-xl border border-dashed border-slate-200 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:border-primary-300 hover:text-primary-600 transition-all"
+                    >
+                        View All Documents
+                    </button>
+                </motion.div>
             </div>
+        </div>
         </div>
     );
 };
