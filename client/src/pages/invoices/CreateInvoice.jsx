@@ -378,15 +378,30 @@ const CreateInvoice = () => {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                             <select 
                                 className="w-full bg-white border border-gray-200 rounded-md pl-10 pr-3 py-2.5 text-sm outline-none focus:border-blue-400"
-                                value={selectedProd?.id || ''}
-                                onChange={(e) => setSelectedProd(products.find(p => String(p.id) === String(e.target.value)))}
+                                value=""
+                                onChange={(e) => {
+                                    const prod = products.find(p => String(p.id) === String(e.target.value));
+                                    if (prod) {
+                                        const newItem = {
+                                            productId: prod.id,
+                                            name: prod.name,
+                                            price: prod.sellingPrice || 0,
+                                            quantity: 1,
+                                            gstRate: prod.taxRate || 0,
+                                            unit: prod.unit || 'PCS',
+                                            stock: prod.openingQty || 0,
+                                            discount: 0,
+                                            discountType: '%'
+                                        };
+                                        calculateTotals([...invoiceData.items, newItem]);
+                                    }
+                                }}
                             >
                                 <option value="">Search or scan barcode for existing products</option>
                                 {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                             </select>
                         </div>
-                        <input type="number" className="w-24 border border-gray-200 rounded-md px-3 py-2 text-sm text-center" placeholder="Qty" value={quickQty} onChange={(e) => setQuickQty(e.target.value)} />
-                        <button onClick={handleQuickAdd} className="bg-blue-600 text-white px-6 py-2.5 rounded-md text-sm font-bold hover:bg-blue-700">+ Add to Bill</button>
+                        </div>
                     </div>
 
                     {/* PRODUCT TABLE */}
