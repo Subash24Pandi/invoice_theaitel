@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Invoice, Customer } = require('../models');
+const { Invoice, Customer, User } = require('../models');
 const auth = require('../middleware/auth');
 const axios = require('axios');
 
@@ -13,7 +13,7 @@ router.get('/', auth, async (req, res) => {
         
         const invoices = await Invoice.findAll({
             where,
-            include: [{ model: Customer }],
+            include: [{ model: Customer }, { model: User, attributes: ['ownerName', 'email'] }],
             order: [['createdAt', 'DESC']]
         });
         res.json(invoices);
@@ -39,7 +39,10 @@ router.get('/next-number', auth, async (req, res) => {
 // Create invoice
 router.post('/', auth, async (req, res) => {
     try {
-        const invoice = await Invoice.create(req.body);
+        const invoice = await Invoice.create({
+            ...req.body,
+            userId: req.user.id
+        });
         
         // Background Webhook to Lead Dashboard
         try {
@@ -71,7 +74,7 @@ router.post('/', auth, async (req, res) => {
 router.get('/:id', auth, async (req, res) => {
     try {
         const invoice = await Invoice.findByPk(req.params.id, {
-            include: [{ model: Customer }]
+            include: [{ model: Customer }, { model: User, attributes: ['ownerName', 'email'] }]
         });
         if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
         res.json(invoice);

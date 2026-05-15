@@ -20,7 +20,8 @@ const Invoice = sequelize.define('Invoice', {
     terms: { type: DataTypes.TEXT },
     totalAmountInWords: { type: DataTypes.TEXT },
     bankDetails: { type: DataTypes.JSON },
-    signature: { type: DataTypes.TEXT }
+    signature: { type: DataTypes.TEXT },
+    userId: { type: DataTypes.INTEGER }
 });
 
 module.exports = Invoice;
