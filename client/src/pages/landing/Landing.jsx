@@ -53,18 +53,18 @@ const Landing = () => {
                         animate={{ opacity: 1, x: 0 }}
                         className="space-y-8"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 border border-primary-100 rounded-full text-primary-600">
-                            <ShieldCheck size={16} className="fill-current opacity-20" />
-                            <span className="text-xs font-black uppercase tracking-widest">100% Safe & Secure!</span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-white">
+                            <Sparkles size={14} className="text-primary-400" fill="currentColor" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">The Future of Business Billing</span>
                         </div>
                         
-                        <h1 className="text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] tracking-tighter">
-                            Simple <span className="text-primary-500">Invoicing</span>
+                        <h1 className="text-6xl lg:text-8xl font-black text-slate-900 leading-[0.95] tracking-tighter">
+                            Elevate your <br />
+                            <span className="text-primary-500">Business</span>
                         </h1>
                         
-                        <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-lg">
-                            Create <span className="text-slate-900 font-bold underline decoration-primary-500 underline-offset-4">invoices</span> for free in 10 seconds ⚡️ <br />
-                            Customize templates, share bills on WhatsApp, and collect payments effortlessly!
+                        <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-lg">
+                            Streamline your workflow with professional <span className="text-slate-900 font-bold underline decoration-primary-500/30">Tax Invoices</span>, Proformas, and Quotations. Send instantly via WhatsApp and scale your operations with ease.
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
