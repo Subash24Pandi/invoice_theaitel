@@ -401,7 +401,6 @@ const CreateInvoice = () => {
                                 {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                             </select>
                         </div>
-                        </div>
                     </div>
 
                     {/* PRODUCT TABLE */}
