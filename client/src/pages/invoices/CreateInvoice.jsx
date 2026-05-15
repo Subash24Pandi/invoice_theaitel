@@ -378,7 +378,8 @@ const CreateInvoice = () => {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                             <select 
                                 className="w-full bg-white border border-gray-200 rounded-md pl-10 pr-3 py-2.5 text-sm outline-none focus:border-blue-400"
-                                onChange={(e) => setSelectedProd(products.find(p => p.id === e.target.value))}
+                                value={selectedProd?.id || ''}
+                                onChange={(e) => setSelectedProd(products.find(p => String(p.id) === String(e.target.value)))}
                             >
                                 <option value="">Search or scan barcode for existing products</option>
                                 {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -571,7 +572,7 @@ const CreateInvoice = () => {
                                     className={`w-full bg-white border ${!invoiceData.bankDetails ? 'border-red-200' : 'border-slate-200'} rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:border-blue-400 appearance-none transition-all shadow-sm group-hover:border-slate-300`}
                                     value={invoiceData.bankDetails?.id || ''}
                                     onChange={(e) => {
-                                        const selectedBank = banks.find(b => b.id === e.target.value);
+                                        const selectedBank = banks.find(b => String(b.id) === String(e.target.value));
                                         setInvoiceData({...invoiceData, bankDetails: selectedBank});
                                     }}
                                 >
@@ -637,7 +638,7 @@ const CreateInvoice = () => {
                                     className={`w-full bg-white border ${!invoiceData.signature ? 'border-red-200' : 'border-slate-200'} rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:border-pink-400 appearance-none transition-all shadow-sm group-hover:border-slate-300`}
                                     value={signatures.find(s => s.image === invoiceData.signature)?.id || ''}
                                     onChange={(e) => {
-                                        const selectedSig = signatures.find(s => s.id === e.target.value);
+                                        const selectedSig = signatures.find(s => String(s.id) === String(e.target.value));
                                         setInvoiceData({...invoiceData, signature: selectedSig?.image});
                                     }}
                                 >
