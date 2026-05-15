@@ -23,6 +23,7 @@ app.use('/api/settings', require('./routes/settings'));
 app.use('/api/gst', require('./routes/gst'));
 app.use('/api/banks', require('./routes/banks'));
 app.use('/api/signatures', require('./routes/signatures'));
+app.use('/api/reports', require('./routes/reports'));
 
 const PORT = process.env.PORT || 5000;
 

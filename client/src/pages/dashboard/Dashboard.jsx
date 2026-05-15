@@ -53,39 +53,31 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const [invRes, custRes] = await Promise.all([
-                    api.get('/invoices?type=Invoice'),
+                // Fetch consolidated summary and all invoices (for total document count)
+                const [summaryRes, allInvoicesRes, custRes] = await Promise.all([
+                    api.get('/reports/summary'),
+                    api.get('/invoices'),
                     api.get('/customers')
                 ]);
                 
-                const totalRevenue = invRes.data.reduce((acc, inv) => acc + inv.totalAmount, 0);
-                const totalPending = invRes.data.reduce((acc, inv) => acc + (inv.totalAmount - (inv.amountPaid || 0)), 0);
+                const summary = summaryRes.data;
+                const allInvoices = allInvoicesRes.data;
                 
                 setData({
-                    revenue: `₹${totalRevenue.toLocaleString('en-IN')}`,
-                    invoices: invRes.data.length.toLocaleString(),
-                    pending: `₹${totalPending.toLocaleString('en-IN')}`,
+                    revenue: `₹${summary.totalSales.toLocaleString('en-IN')}`,
+                    invoices: allInvoices.length.toLocaleString(),
+                    pending: `₹${summary.totalPending.toLocaleString('en-IN')}`,
                     customers: custRes.data.length.toLocaleString()
                 });
 
-                // Generate real chart data for last 6 months
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                const now = new Date();
-                const last6Months = [];
-                for (let i = 5; i >= 0; i--) {
-                    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                    const monthName = months[d.getMonth()];
-                    const monthRevenue = invRes.data
-                        .filter(inv => {
-                            const invDate = new Date(inv.date);
-                            return invDate.getMonth() === d.getMonth() && invDate.getFullYear() === d.getFullYear();
-                        })
-                        .reduce((acc, inv) => acc + inv.totalAmount, 0);
-                    last6Months.push({ name: monthName, value: monthRevenue });
+                // Set chart data from summary
+                if (summary.monthlySales) {
+                    setChartData(summary.monthlySales.map(s => ({ name: s.month, value: s.total })));
                 }
-                setChartData(last6Months);
 
-            } catch (err) { console.error(err); }
+            } catch (err) { 
+                console.error('Dashboard Fetch Error:', err); 
+            }
         };
         fetchStats();
     }, []);
